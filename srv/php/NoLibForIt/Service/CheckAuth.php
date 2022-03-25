@@ -2,15 +2,15 @@
 
 namespace NoLibForIt\Service;
 
-class CheckAuth {
+class CheckAuth extends \NoLibForIt\API\Service {
 
   public const ALLOW        = [ "GET", "POST", "PUT", "PATCH" ];
-  public const CONTENT_TYPE = "text/plain; charset=utf-8";
+  public const CONTENT_TYPE = "text/plain; charset=uft-8";
 
-  public static function handle($request) {
+  public function handle() {
     $this->request->requiresAuth();
     $this->answer
-      ->plain("{$this->request->method} access granted")
+      ->with("Access granted")
       ->ok();
   }
 

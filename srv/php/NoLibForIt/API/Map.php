@@ -4,10 +4,12 @@ namespace NoLibForIt\API;
 
 class Map {
 
+  public const NS = "\\NoLibForIt\\Service\\";
   public const SERVICE = array(
-    "ping"    => "\NoLibForIt\Service\Ping",
-    "ip"      => "\NoLibForIt\Service\Ip",
-    "server"  => "\NoLibForIt\Service\DumpServer",
+    "ping"    => self::NS . "Ping",
+    "ip"      => self::NS . "Ip",
+    "server"  => self::NS . "DumpServer",
+    "auth"    => self::NS . "CheckAuth",
   );
 
 }
