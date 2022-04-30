@@ -13,12 +13,17 @@ abstract class Service {
     $this->request = $request;
     $this->answer  = new Answer($this::CONTENT_TYPE,$this::CHARSET);
 
+    /* do not use self:ALLOW as it would refer to parent in child context */
     if( ! in_array($this->request->method,$this::ALLOW ) ) {
-      $this->answer
-        ->plain("Not allowed")
-        ->close(405);
+      $this->notAllowed();
     }
 
+  }
+
+  protected function notAllowed() {
+    $this->answer
+      ->plain("Not allowed")
+      ->close(405);
   }
 
   public function handle() {

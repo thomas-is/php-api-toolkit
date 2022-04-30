@@ -13,7 +13,7 @@ class Ip extends \NoLibForIt\API\Service {
 
     if ( empty($socket) ) {
       $this->answer
-        ->plain("Service unavailable")
+        ->json( [ "error" => "Service unavailable" ] )
         ->close(503);
     };
 
@@ -27,7 +27,7 @@ class Ip extends \NoLibForIt\API\Service {
     $ip = $lines[array_key_last($lines)];
 
     $this->answer
-      ->json(array("ip"=>$ip))
+      ->json( [ "ip" => $ip ] )
       ->ok();
 
   }

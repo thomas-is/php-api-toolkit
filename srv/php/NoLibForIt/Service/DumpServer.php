@@ -13,6 +13,13 @@ class DumpServer extends \NoLibForIt\API\Service {
       ->ok();
   }
 
+  protected function notAllowed() {
+    $this->answer
+      ->json( [ 'message' => 'Method not allowed' ] )
+      ->code(405);
+  }
+
+
 }
 
 ?>

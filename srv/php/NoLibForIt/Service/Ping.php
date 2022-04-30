@@ -10,7 +10,7 @@ class Ping extends \NoLibForIt\API\Service {
 
   public function handle() {
     $this->answer
-      ->with($this->request)
+      ->json($this->request)
       ->ok();
   }
 

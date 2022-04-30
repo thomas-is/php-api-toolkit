@@ -5,9 +5,9 @@ namespace NoLibForIt\API;
 class Engine {
 
   /**
+    * start the API engine
     * @static
     * @uses NoLibForIt\API\Request
-    * @uses NoLibForIt\API\Answer
     * @uses NoLibForIt\API\Answer
     **/
   public static function start() {
@@ -23,27 +23,26 @@ class Engine {
 
     $serviceClass = @API_SERVICE[@$request->argv[0]];
 
+    /* 404 on undefined service mapping */
     if( empty($serviceClass) ) {
       $answer
         ->plain("Not found")
         ->close(404);
     }
 
+    /* 500 on mapped but undefined class */
     if( ! class_exists($serviceClass) ) {
       $answer
         ->plain("Class $serviceClass does not exist")
         ->close(500);
     }
 
+    /* handle OPTIONS method */
     if( $request->method == "OPTIONS" ) {
-      /**
-        * Allow: GET,HEAD,POST,OPTIONS,TRACE
-        * Content-Type: application/json
-        **/
-      if( @$serviceClass::ALLOW ) {
+      if( ! empty(@$serviceClass::ALLOW) ) {
         $answer->setHeader("Allow",implode(",",$serviceClass::ALLOW));
       }
-      if( @$serviceClass::CONTENT_TYPE ) {
+      if( ! empty(@$serviceClass::CONTENT_TYPE) ) {
         $answer->setHeader("Content-Type",$serviceClass::CONTENT_TYPE);
       }
       $answer->ok();
@@ -52,6 +51,7 @@ class Engine {
     $service = new $serviceClass($request);
     $service->handle();
 
+    /* 520 on service no reply */
     $answer
       ->plain("Service ended with no reply")
       ->close(520);

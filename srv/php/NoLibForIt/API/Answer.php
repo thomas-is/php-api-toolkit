@@ -21,37 +21,30 @@ class Answer {
 
   }
 
+  private function contentTypeHeader() {
+    $this->setHeader('Content-Type',$this->contentType."; ".$this->charset);
+  }
+
   public function reset() {
     return new Answer($this->contentType,$this->charset);
   }
 
-  public function with( $data ) {
-    $this->autoContent();
-    switch($this->contentType) {
-      case 'application/json':
-        return $this->json($data);
-      default:
-      case 'text/plain':
-        return $this->plain($data);
-    }
-  }
-
   public function json( $obj ) {
     $this->contentType = "application/json";
-    $this->autoContent();
+    $this->contentTypeHeader();
     $this->body = json_encode($obj, JSON_INVALID_UTF8_IGNORE);
     return $this;
   }
 
   public function plain( string $text ) {
     $this->contentType = "text/plain";
-    $this->autoContent();
+    $this->contentTypeHeader();
     $this->body = $text;
     return $this;
   }
   public function pdf( string $file ) {
     $this->setHeader("Content-Type","application/pdf");
-    $this->body = file_get_contents("/srv/webroot/pdf/last.pdf");
+    $this->body = file_get_contents($file);
     return $this;
   }
 
@@ -71,13 +64,6 @@ class Answer {
   public function setHeader( string $key, string $value ) {
     $this->header[$key] = $value;
     return $this;
-  }
-
-  private function autoContent() {
-    $this->setHeader(
-      'Content-Type',
-      $this->contentType . "; " . $this->charset
-    );
   }
 
 }

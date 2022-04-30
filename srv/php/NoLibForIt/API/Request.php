@@ -61,19 +61,19 @@ class Request {
 
     if( ! defined('API_BASE_URI') ) {
       $this->answer
-        ->plain("API_BASE_URI is undefined")
+        ->plain("undefined API_BASE_URI")
         ->close(500);
     }
 
-    if( ! isset($_SERVER) ) {
+    if( empty(@$_SERVER) ) {
       $this->answer
-        ->plain("\$_SERVER is not set")
+        ->plain("undefined \$_SERVER")
         ->close(500);
     }
 
-    if( ! isset($_SERVER['REQUEST_URI']) ) {
+    if( empty(@$_SERVER['REQUEST_URI']) ) {
       $this->answer
-        ->plain("REQUEST_URI is not set")
+        ->plain("undefined REQUEST_URI")
         ->close(500);
     }
 
@@ -108,14 +108,14 @@ class Request {
     }
     $this->argc = count($this->argv);
 
-    $param = array();
+    $param = [];
     if( @$uri['query'] ) {
       $param = explode( '&', $uri['query'] );
     }
     foreach( $param as $line ) {
       $element = explode("=",$line);
-      $key     = urldecode(@$element[0]);
-      $value   = urldecode(@$element[1]);
+      $key     = urldecode( (string) @$element[0]);
+      $value   = urldecode( (string) @$element[1]);
       $this->param[$key] = $value;
     }
 
@@ -140,11 +140,11 @@ class Request {
 
   }
 
-  public function requiresAuth( $headerKey = "Authorization" ) {
+  public function requiresAuth( string $headerKey = "Authorization" ) {
 
     if( ! defined('API_AUTH_FILE') ) {
       $this->answer
-        ->plain("API_AUTH_FILE is undefined")
+        ->plain("undefined API_AUTH_FILE")
         ->close(500);
     }
 
@@ -155,7 +155,7 @@ class Request {
     }
 
     $xauth = @$this->header[$headerKey];
-    if( ! $xauth ) {
+    if( empty($xauth) ) {
       $this->answer
         ->plain("Unauthorized")
         ->close(401);
@@ -183,7 +183,6 @@ class Request {
     }
 
   }
-
 
 }
 

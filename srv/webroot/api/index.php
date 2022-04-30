@@ -1,4 +1,4 @@
 <?php
-include('/srv/autoloader.php');
+require_once('/srv/autoloader.php');
 NoLibForIt\API\Engine::start();
 ?>
