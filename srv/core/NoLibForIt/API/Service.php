@@ -9,26 +9,23 @@ abstract class Service {
   public const CHARSET      = "utf-8";
 
   public function __construct(Request $request) {
-
     $this->request = $request;
+    /* do not use self as it would refer to parent in child context */
     $this->answer  = new Answer($this::CONTENT_TYPE,$this::CHARSET);
-
-    /* do not use self:ALLOW as it would refer to parent in child context */
     if( ! in_array($this->request->method,$this::ALLOW ) ) {
       $this->notAllowed();
     }
-
   }
 
   protected function notAllowed() {
     $this->answer
-      ->plain("Not allowed")
+      ->body("Not allowed")
       ->close(405);
   }
 
   public function handle() {
     $this->answer
-      ->plain("Not implemented")
+      ->body("Not implemented")
       ->close(501);
   }
 
